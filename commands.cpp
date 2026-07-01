@@ -275,10 +275,12 @@ static std::string get_internal_state_path ()
 		return common;
 	}
 
-	// Neither exists yet (e.g. during `git-crypt init`); create under the
-	// per-worktree directory, matching historical behaviour.  In the main
-	// worktree --git-dir and --git-common-dir are identical.
-	return per_worktree;
+	// Neither exists yet (e.g. during `git-crypt init`, or the first unlock in
+	// a linked worktree); create under the common git directory shared by every
+	// worktree so that the key is reachable from all of them.  In the main
+	// worktree --git-dir and --git-common-dir are identical, so this matches
+	// historical behaviour there.
+	return common;
 }
 
 static std::string get_internal_keys_path (const std::string& internal_state_path)
